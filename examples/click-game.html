@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+  <style type='text/css'>
+    * {
+      user-select: none;
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120px" height="100px" style="font-size: 100vmin;"><text y="80%" fill="pink">&#128022;</text></svg>'), auto;
+    }
+    body { 
+      text-align: center;
+      background: black;
+    }
+    h2 { color: white; }
+
+    div.target {
+      position: absolute;
+      font-size: 10vmin;
+      color: white;
+      transition: .1s all;
+      --audio-src: url('click.ogg');
+    }
+    div.target:active {
+      color: green;
+      --audio-state: playing;
+    }
+  </style>
+  <script type='text/javascript' src='../cssa.js'></script>
+  <script type='text/javascript'>
+    window.addEventListener('load', function() {
+      KTK.CSSA.init({selectors: ['active']});
+
+      var targets       = [];
+      var score         = document.getElementById('score');
+      var last_ts       = 0;
+      var spawn_counter = 0;
+
+      function createTarget() {
+        var t = document.createElement('div');
+        t.className = 'target';
+        t.innerHTML = '&#127' + (815 + Math.floor(Math.random()*40));
+        t.addEventListener('mouseup', function() {
+          if (targets.indexOf(t) === -1) return;
+          t.innerHTML = '&#128055';
+          deleteTarget(t, 100 - targets.indexOf(t)*10);
+        });
+        t.style.left = 5 + Math.floor(Math.random()*80) + 'vw';
+        t.style.top = 5 + Math.floor(Math.random()*80) + 'vmin';
+        t.style.color = 'rgb('+Math.floor(55+Math.random()*200)+','+Math.floor(55+Math.random()*200)+','+Math.floor(55+Math.random()*200)+')';
+        document.body.appendChild(t);
+        targets.push(t);
+        return t;
+      }
+      function deleteTarget(t, value) {
+        targets.splice(targets.indexOf(t), 1);
+        if (value) score.innerText = parseInt(score.innerText)+value;
+        setTimeout(function() {
+          t.parentNode.removeChild(t);
+        }, 500);
+      }
+
+      function gameLoop(ts) {
+        var elapsed = ts - last_ts
+        spawn_counter += elapsed;
+        while (spawn_counter > 800) {
+          if (targets.length < 10) {
+            createTarget();
+          } else {
+            deleteTarget(targets[0], -100);
+          }
+          spawn_counter -= 800;
+        }
+        last_ts = ts;
+        window.requestAnimationFrame(gameLoop);
+      }
+      window.requestAnimationFrame(gameLoop);
+    })
+  </script>
+</head>
+<body>
+  <h2>Score: <span id='score'>0</span></h2>
+</body>
+</html>

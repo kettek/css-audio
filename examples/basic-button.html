@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+  <style type='text/css'>
+    button {
+      --audio-src: url('click.ogg');
+    }
+    button:active {
+      --audio-state: playing;
+    }
+  </style>
+  <script type='text/javascript' src='../cssa.js'></script>
+  <script type='text/javascript'>
+    window.addEventListener('load', function() { KTK.CSSA.init(); })
+  </script>
+</head>
+<body>
+  <button>click</button>
+</body>
+</html>
