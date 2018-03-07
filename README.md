@@ -21,7 +21,7 @@ A brief example, to add a sound to a button that triggers on click, would be:
 
 ## Basic Usage
 Add the following to your HTML `<head>`:
->    &lt;script type='text/javascript' src='//kettek.net/s/css-audio/css-audio-0.1.0.min.js'>&lt;/script>
+>    &lt;script type='text/javascript' src='//kettek.net/s/css-audio/css-audio-LATEST.min.js'>&lt;/script>
 >    
 >    &lt;script type='text/javascript'>window.addEventListener('load', function() { KTK.CSSA.init(); })&lt;/script>
 
