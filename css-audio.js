@@ -22,14 +22,17 @@ var KTK = KTK || {}; KTK.CSSA = (function() {
   var mConfig = {
     observeNodeConfig: { attributeFilter: ['style', 'class', 'id'] },
     observeDOMConfig: { childList: true },
+    observeHeadConfig: { childList: true },
     processDOM: true,
     observeDOM: true,
+    observeHead: true,
     recurseNodes: true,
     selectors: ['active', 'hover', 'focus', 'checked']
   };
   // MutatonObservers for the DOM and Nodes
   var observerDOM = new MutationObserver(observeDOMCallback);
   var observerNode = new MutationObserver(observeNodeCallback);
+  var observerHead = new MutationObserver(observeHeadCallback);
   // Default properties acquired for managing audio states
   var defaultProperties = ['--audio-src','--audio-state','--audio-playback','--audio-offset','--audio-duration','--audio-ontrigger','--audio-loop','--audio-volume'];
 
@@ -64,6 +67,28 @@ var KTK = KTK || {}; KTK.CSSA = (function() {
       processNode(nodes[i]);
       observeNode(nodes[i]);
     }
+  }
+
+  /* observeHeadCallback(mutatonRecords)
+  * This function is the callback for MutationRecord updates to the Head. For 
+  * each added Node `processNode` and `observeNode` is called.
+  */
+  function observeHeadCallback(mutationRecords) {
+    for (var mutation of mutationRecords) {
+      for (var i = 0; i < mutation.addedNodes.length; i++) {
+        if (mutation.addedNodes[i].rel == "stylesheet" || mutation.addedNodes[i].tagName === "style") {
+          processDOM();
+        }
+      }
+    }
+  }
+
+  /* observeHead()
+  * This function begins observing document.head with observerHead. It also
+  * uses the `observeHeadConfig` property as contained in `mConfig`.
+  */
+  function observeHead() {
+    observerHead.observe(document.head, mConfig.observeHeadConfig);
   }
 
   /* observeNodeCallback(mutationRecords)
@@ -317,6 +342,7 @@ var KTK = KTK || {}; KTK.CSSA = (function() {
     processNode: processNode,
     observeNode: observeNode,
     observeDOM: observeDOM,
+    observeHead: observeHead,
     processDOM: processDOM,
     init: function(config) {
       Object.assign(mConfig, config);
@@ -325,6 +351,9 @@ var KTK = KTK || {}; KTK.CSSA = (function() {
       }
       if (mConfig.observeDOM) {
         observeDOM();
+      }
+      if (mConfig.observeHead) {
+        observeHead();
       }
     }
   }
