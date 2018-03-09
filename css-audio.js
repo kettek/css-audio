@@ -271,8 +271,10 @@ var KTK = KTK || {}; KTK.CSSA = (function() {
   * See `hasSelectorRule()` and `getSelector()` for more information on its approach.
   */
   function updateSelectorHandlers(elem) {
+    if (!elem.cssaListeners) elem.cssaListeners = {};
     // :active
-    if (mConfig.selectors.indexOf('active') !== -1 && hasSelectorRule(getSelector(elem)+':active')) {
+    if (!elem.cssaListeners.active && mConfig.selectors.indexOf('active') !== -1 && hasSelectorRule(getSelector(elem)+':active')) {
+      elem.cssaListeners.active = true;
       (function(){
         var state = getPropertyValues(elem, defaultProperties);
         elem.addEventListener('mousedown', function(e) {
@@ -284,7 +286,8 @@ var KTK = KTK || {}; KTK.CSSA = (function() {
       })();
     }
     // :hover
-    if (mConfig.selectors.indexOf('hover') !== -1 && hasSelectorRule(getSelector(elem)+':hover')) {
+    if (!elem.cssaListeners.hover && mConfig.selectors.indexOf('hover') !== -1 && hasSelectorRule(getSelector(elem)+':hover')) {
+      elem.cssaListeners.hover = true;
       elem.addEventListener('mouseover', function(e) {
         handleAudioState(elem, getPropertyValues(elem, defaultProperties));
       });
@@ -293,7 +296,8 @@ var KTK = KTK || {}; KTK.CSSA = (function() {
       });
     }
     // :focus
-    if (mConfig.selectors.indexOf('focus') !== -1 && hasSelectorRule(getSelector(elem)+':focus')) {
+    if (!elem.cssaListeners.focus && mConfig.selectors.indexOf('focus') !== -1 && hasSelectorRule(getSelector(elem)+':focus')) {
+      elem.cssaListeners.focus = true;
       elem.addEventListener('focus', function(e) {
         handleAudioState(elem, getPropertyValues(elem, defaultProperties));
       });
@@ -302,7 +306,8 @@ var KTK = KTK || {}; KTK.CSSA = (function() {
       });
     }
     // :checked
-    if (mConfig.selectors.indexOf('checked') !== -1 && hasSelectorRule(getSelector(elem)+':checked')) {
+    if (!elem.cssaListeners.checked && mConfig.selectors.indexOf('checked') !== -1 && hasSelectorRule(getSelector(elem)+':checked')) {
+      elem.cssaListeners.checked = true;
       elem.addEventListener('change', function(e) {
         handleAudioState(elem, getPropertyValues(elem, defaultProperties));
       });
