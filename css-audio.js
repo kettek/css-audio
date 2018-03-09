@@ -24,6 +24,7 @@ var KTK = KTK || {}; KTK.CSSA = (function() {
     observeDOMConfig: { childList: true },
     processDOM: true,
     observeDOM: true,
+    recurseNodes: true,
     selectors: ['active', 'hover', 'focus', 'checked']
   };
   // MutatonObservers for the DOM and Nodes
@@ -81,6 +82,11 @@ var KTK = KTK || {}; KTK.CSSA = (function() {
   */
   function observeNode(which) {
     observerNode.observe(which, mConfig.observeNodeConfig);
+    if (mConfig.recurseNodes) {
+      for (var i = 0; i < which.children.length; i++) {
+        observeNode(which.children[i]);
+      }
+    }
   }
 
   /* processNode()
@@ -92,6 +98,11 @@ var KTK = KTK || {}; KTK.CSSA = (function() {
     var cs = window.getComputedStyle(which, null);
     if (cs.getPropertyValue('--audio-src')) {
       setupNode(which);
+    }
+    if (mConfig.recurseNodes) {
+      for (var i = 0; i < which.children.length; i++) {
+        processNode(which.children[i]);
+      }
     }
   }
 
