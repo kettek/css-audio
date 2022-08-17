@@ -278,7 +278,8 @@ var KTK = KTK || {}; KTK.CSSA = (function() {
       (function(){
         var state = getPropertyValues(elem, defaultProperties);
         elem.addEventListener('mousedown', function(e) {
-          state = getPropertyValues(elem, defaultProperties);
+          // Fix due to Firefox only setting :active style _after_ mousedown, whilst Chromium-based sets it _before_ mousedown.
+          setTimeout(_=>state = getPropertyValues(elem, defaultProperties), 0);
         });
         elem.addEventListener('mouseup', function(e) {
           handleAudioState(elem, state);
