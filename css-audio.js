@@ -147,11 +147,15 @@ var KTK = KTK || {}; KTK.CSSA = (function() {
   */
   function hasSelectorRule(selector) {
     for (var i = 0; i < document.styleSheets.length; i++) {
-      var rules = document.styleSheets[i].cssRules;
-      for (var j = 0; j < rules.length; j++) {
-        if (!rules[j].selectorText) continue;
-        // Okay, this is bogus, but we just check for rules that end with our desired selector
-        if (rules[j].selectorText.indexOf(selector, rules[j].selectorText.length - selector.length) !== -1) return true;
+      try {
+        var rules = document.styleSheets[i].cssRules;
+        for (var j = 0; j < rules.length; j++) {
+          if (!rules[j].selectorText) continue;
+          // Okay, this is bogus, but we just check for rules that end with our desired selector
+          if (rules[j].selectorText.indexOf(selector, rules[j].selectorText.length - selector.length) !== -1) return true;
+        }
+      } catch(err) {
+        // Ignore cross-domain css errors. Maybe we should print some sort of error here.
       }
     }
     return false;
