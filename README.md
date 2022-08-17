@@ -74,6 +74,12 @@ To specify the state of multiple audio sources, supply multiple values separated
 * **stopped** *default*
   * The audio should stop its playback.
 
+### `--audio-volume`
+The `--audio-volume` property sets the audio volume from 0 to 100%.
+
+#### Syntax
+The audio volume is specified as a value from 0 to 100, representing the percentage volume to reduce or increase by.
+
 ### `--audio-playback`
 The `--audio-playback` property sets how the audio should manage playback.
 
