@@ -13,6 +13,8 @@
     * continue: continues playing if the audio is still playing
     * reset: resets the audio to the beginning
     * multi: creates a new audio playback source
+  * --audio-hold-navigation: finished
+    * finished: waits for any playing audio on the element to finish before navigation can occur
 
 P.S., none of this triggers for childrens TODO: add 'processChildren' bool to mConfig
 
@@ -34,7 +36,7 @@ var KTK = KTK || {}; KTK.CSSA = (function() {
   var observerNode = new MutationObserver(observeNodeCallback);
   var observerHead = new MutationObserver(observeHeadCallback);
   // Default properties acquired for managing audio states
-  var defaultProperties = ['--audio-src','--audio-state','--audio-playback','--audio-offset','--audio-duration','--audio-ontrigger','--audio-loop','--audio-volume'];
+  var defaultProperties = ['--audio-src','--audio-state','--audio-playback','--audio-offset','--audio-duration','--audio-ontrigger','--audio-loop','--audio-volume','--audio-hold-navigation'];
 
   /* observeDOMCallback(mutatonRecords)
   * This function is the callback for MutationRecord updates to the DOM. For 
@@ -289,6 +291,27 @@ var KTK = KTK || {}; KTK.CSSA = (function() {
         elem.addEventListener('mouseup', function(e) {
           handleAudioState(elem, state);
         });
+        // Force playthrough of audio when anchors or buttons are clicked by preventing navigation until they are done.
+        if (elem.getAttribute('href') && elem.audio) {
+          elem.addEventListener('click', function(e) {
+            if (state["--audio-hold-navigation"].filter(v=>v==='finished').length > 0 && state["--audio-state"].indexOf('playing') >= 0) {
+              let audio = elem.audio.find(v=>!v.paused);
+              if (audio) {
+                e.preventDefault();
+                audio.addEventListener('ended', function(e) {
+                  let a = document.createElement('a');
+                  a.href = elem.getAttribute('href');
+                  var clickEvent = new MouseEvent("click", {
+                    "view": window,
+                    "bubbles": true,
+                    "cancelable": false
+                  });
+                  a.dispatchEvent(clickEvent);
+                })
+              }
+            }
+          });
+        }
       })();
     }
     // :hover

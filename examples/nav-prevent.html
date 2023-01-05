@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head>
+  <style type='text/css'>
+    a {
+      --audio-src: url('click.ogg');
+    }
+    a:active {
+      --audio-state: playing;
+      --audio-hold-navigation: finished;
+    }
+  </style>
+  <script type='text/javascript' src='../css-audio.js'></script>
+  <script type='text/javascript'>
+    window.addEventListener('load', function() { KTK.CSSA.init(); })
+  </script>
+</head>
+<body>
+  <a href="./nav-prevent.html">click</a>
+</body>
+</html>
