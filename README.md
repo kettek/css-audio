@@ -165,7 +165,7 @@ The `--audio-hold-navigation` property prevents the element from navigating the 
 
 #### Syntax
 ```
---audio-hold-naviagtion: finished;
+--audio-hold-navigation: finished;
 ```
 
 #### Values
