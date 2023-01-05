@@ -160,6 +160,18 @@ The specify offset rules for multiple audio sources, supply multiple values sepa
 * **&lt;time>**
   * Is a [&lt;time>](https://developer.mozilla.org/en-US/docs/Web/CSS/time) denoting the offset of the audio. There can be several of them, separated by commas. *Defaults to "0s"*
 
+### `--audio-hold-navigation`
+The `--audio-hold-navigation` property prevents the element from navigating the browser until any playing audio on the element has finished playback.
+
+#### Syntax
+```
+--audio-hold-naviagtion: finished;
+```
+
+#### Values
+* **finished**
+  * The element is prevented from navigating the page until the element's audio playback is complete.
+
 ## Advanced Usage
 ### Initialization Options
 **css-audio** can be passed a configuration object through the `init()` call, thereby changing some of the core functionality of **css-audio** to fit your needs.
